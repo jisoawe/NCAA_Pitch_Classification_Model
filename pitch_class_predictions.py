@@ -1,8 +1,5 @@
 import pandas as pd
 import numpy as np
-from sklearn.metrics import classification_report,confusion_matrix, accuracy_score
-from sklearn.model_selection import train_test_split, cross_val_score, StratifiedKFold
-from sklearn.inspection import permutation_importance
 
 def make_predictions(model, new_data):
     """
