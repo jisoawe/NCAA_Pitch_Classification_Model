@@ -19,7 +19,9 @@ def evaluate_model(model, X_test, y_test):
 
     report = classification_report(y_test, y_pred, output_dict= True)
     c_matrix = confusion_matrix(y_test, y_pred)
+    acc_score = accuracy_score(y_test, y_pred)
 
     return {'Classification Report': report,
-            'Confusion Matrix': c_matrix}
+            'Confusion Matrix': c_matrix,
+           'Accuracy Score': acc_score}
 
