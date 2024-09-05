@@ -61,7 +61,7 @@ def pitch_type_adjust(df):
     df['TaggedPitchType'] = df['TaggedPitchType'].replace('Sinker', 'Fastball')
         
     nope = ['Other', 'Splitter', 'Undefined', 'Knuckleball']
-    df[~df['TaggedPitchType'].isin(nope)]
+    df = df[~df['TaggedPitchType'].isin(nope)]
         
     return df
 
