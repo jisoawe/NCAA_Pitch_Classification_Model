@@ -26,6 +26,7 @@ def left_to_right_movement(df):
     Args: df (pd.DataFrame): data frame of the cleaned data
     Returns: pd.DataFrame: normalized to RHP movement profile
     """
+    df['Tilt'] = df['Tilt'] + ':00'
 
     tilt_mapping = {
         '11:45:00':'12:15:00','11:30:00': '12:30:00','11:15:00':'12:45:00','11:00:00':'01:00:00', 
@@ -40,12 +41,12 @@ def left_to_right_movement(df):
         '02:45:00':'09:15:00','02:30:00':'09:30:00','02:15:00':'09:45:00','02:00:00':'10:00:00',
         '01:45:00':'10:15:00','01:30:00':'10:30:00','01:15:00':'10:45:00','01:00:00':'11:00:00'}
     
-    if df['PitcherThrows'].iloc[0] == 'Left':
-        df['Tilt'] = df['Tilt'].map(tilt_mapping)
+    df.loc[df['PitcherThrows'] == 'Left', 'Tilt'] = df.loc[df['PitcherThrows'] == 'Left', 'Tilt'].map(tilt_mapping)
         
-        for col in ['HorzBreak', 'RelSide', 'HorzRelAngle', 'HorzApprAngle', 'PitchTrajectoryZc0', 'PitchTrajectoryZc1', 'PitchTrajectoryZc2']:
-            if col in df.columns:
-                df[col] = df[col]*-1
+    adjust_cols = ['HorzBreak', 'RelSide', 'HorzRelAngle', 'HorzApprAngle', 'PitchTrajectoryZc0', 'PitchTrajectoryZc1', 'PitchTrajectoryZc2']
+    for col in adjust_cols:    
+        if col in df.columns:
+            df.loc[df['PitcherThrows'] == 'Left', col] = df.loc[df['PitcherThrows'] == 'Left', col] *-1
             
     df = df.drop('PitcherThrows', axis=1)
     return df
@@ -88,9 +89,10 @@ def transform_data(df):
     
     df = df[cols]
     
-    left_to_right_movement(df)
-    pitch_type_adjust(df)
-    tilt_to_minutes(df)
+    df = left_to_right_movement(df)
+    df = pitch_type_adjust(df)
+    df = tilt_to_minutes(df)
+    return df
 
 
 def save_data(df, output_path):
