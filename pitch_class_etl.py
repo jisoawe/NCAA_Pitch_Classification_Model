@@ -9,17 +9,6 @@ def load_data(file_path):
 
     return pd.read_csv(file_path)
 
-def clean_data(df):
-    """
-    Cleaning the data
-    Args: df (pd.DataFrame): data frame of the inital loaded data
-    Returns: pd.DataFrame: Cleaned Data
-    """
-
-    df = df.dropna()
-    df = df.drop_duplicates()
-    return df
-
 def left_to_right_movement(df):
     """
     Normalizing movement profiles of LHP to be consistent with the movement profiles of RHP
@@ -43,7 +32,7 @@ def left_to_right_movement(df):
     
     df.loc[df['PitcherThrows'] == 'Left', 'Tilt'] = df.loc[df['PitcherThrows'] == 'Left', 'Tilt'].map(tilt_mapping)
         
-    adjust_cols = ['HorzBreak', 'RelSide', 'HorzRelAngle', 'HorzApprAngle', 'PitchTrajectoryZc0', 'PitchTrajectoryZc1', 'PitchTrajectoryZc2']
+    adjust_cols = ['HorzBreak', 'PitchTrajectoryZc2']
     for col in adjust_cols:    
         if col in df.columns:
             df.loc[df['PitcherThrows'] == 'Left', col] = df.loc[df['PitcherThrows'] == 'Left', col] *-1
@@ -71,6 +60,7 @@ def tilt_to_minutes(df):
     Args: df (pd.DataFrame): data frame of the cleaned data
     Returns: pd.DataFrame: Transformed Data with tilt minutes var instead of tilt
     """
+
     df['Tilt_minutes'] = (pd.to_timedelta(df['Tilt']).dt.total_seconds())/60
     df = df.drop('Tilt', axis = 1)
     return df
@@ -81,17 +71,27 @@ def transform_data(df):
     Args: df (pd.DataFrame): data frame of the cleaned data
     Returns: pd.DataFrame: Transformed Data optimized for modeling
     """
-    cols = ['PitcherThrows', 'RelSpeed', 'VertRelAngle', 'HorzRelAngle', 'SpinRate', 'SpinAxis',
-            'RelHeight', 'RelSide', 'Extension', 'VertBreak', 'InducedVertBreak', 'HorzBreak', 'ZoneSpeed',
-           'VertApprAngle', 'HorzApprAngle', 'PitchTrajectoryXc0','PitchTrajectoryXc1', 'PitchTrajectoryXc2',
-            'PitchTrajectoryYc0', 'PitchTrajectoryYc1', 'PitchTrajectoryYc2', 'PitchTrajectoryZc0',
-            'PitchTrajectoryZc1','PitchTrajectoryZc2', 'TaggedPitchType', 'Tilt']
+
+    cols = ['PitcherThrows', 'RelSpeed', 'SpinRate', 'SpinAxis',
+             'VertBreak', 'HorzBreak', 'ZoneSpeed', 'PitchTrajectoryXc1',
+             'PitchTrajectoryYc2', 'PitchTrajectoryZc2', 'TaggedPitchType', 'Tilt']
     
     df = df[cols]
     
     df = left_to_right_movement(df)
     df = pitch_type_adjust(df)
     df = tilt_to_minutes(df)
+    return df
+
+def clean_data(df):
+    """
+    Cleaning the data
+    Args: df (pd.DataFrame): data frame of the inital loaded data
+    Returns: pd.DataFrame: Cleaned Data
+    """
+
+    df = df.dropna()
+    df = df.drop_duplicates()
     return df
 
 

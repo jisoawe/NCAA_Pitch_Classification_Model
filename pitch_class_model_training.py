@@ -1,8 +1,6 @@
-#from pitch_classification_preprocessing.py import one_hot_encoded_data, X, y, X_train, X_test, y_train, y_test
 import pandas as pd
-from sklearn.model_selection import train_test_split, cross_val_score, StratifiedKFold
-from sklearn.tree import DecisionTreeClassifier
-#from sklearn.neighbors import KNeighborsClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.neighbors import KNeighborsClassifier
 
 def split_data(df, target_column):
     """
@@ -27,10 +25,9 @@ def train_model(X_train, y_train):
     Returns: The optimized model
     """
     X_train.dropna(inplace=True)
-    y_train = y_train.loc[X_train.index] 
-    model = DecisionTreeClassifier(criterion = 'gini',
-    max_depth = 8, max_features = None, 
-    min_samples_leaf = 1, min_samples_split = 10)
+    y_train = y_train.loc[X_train.index]
+    model = KNeighborsClassifier(metric = 'manhattan', n_neighbors = 10, 
+                               weights = 'distance')
     
     model.fit(X_train, y_train)
 
