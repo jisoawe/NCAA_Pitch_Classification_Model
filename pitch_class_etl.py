@@ -74,7 +74,7 @@ def transform_data(df):
 
     cols = ['PitcherThrows', 'RelSpeed', 'SpinRate', 'SpinAxis',
              'VertBreak', 'HorzBreak', 'ZoneSpeed', 'PitchTrajectoryXc1',
-             'PitchTrajectoryYc2', 'PitchTrajectoryZc2', 'TaggedPitchType', 'Tilt']
+             'PitchTrajectoryZc1', 'TaggedPitchType', 'Tilt_minutes']
     
     df = df[cols]
     
