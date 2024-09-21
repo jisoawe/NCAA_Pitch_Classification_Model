@@ -1,7 +1,5 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split
-from imblearn.over_sampling import SMOTE
-from sklearn.preprocessing import StandardScaler
 from sklearn.neighbors import KNeighborsClassifier
 
 def split_data(df, target_column):
