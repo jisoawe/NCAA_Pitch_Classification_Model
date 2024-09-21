@@ -1,5 +1,7 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split
+from imblearn.over_sampling import SMOTE
+from sklearn.preprocessing import StandardScaler
 from sklearn.neighbors import KNeighborsClassifier
 
 def split_data(df, target_column):
@@ -26,6 +28,7 @@ def train_model(X_train, y_train):
     """
     X_train.dropna(inplace=True)
     y_train = y_train.loc[X_train.index]
+    
     model = KNeighborsClassifier(metric = 'manhattan', n_neighbors = 10, 
                                weights = 'distance')
     

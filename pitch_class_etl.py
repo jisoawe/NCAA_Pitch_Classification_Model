@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 
 def load_data(file_path):
     """
@@ -15,7 +16,10 @@ def left_to_right_movement(df):
     Args: df (pd.DataFrame): data frame of the cleaned data
     Returns: pd.DataFrame: normalized to RHP movement profile
     """
-    df['Tilt'] = df['Tilt'] + ':00'
+    if len(df['Tilt'][1]) < 7:
+        df['Tilt'] = df['Tilt'] + ':00'
+    else:
+        pass
 
     tilt_mapping = {
         '11:45:00':'12:15:00','11:30:00': '12:30:00','11:15:00':'12:45:00','11:00:00':'01:00:00', 
@@ -74,7 +78,7 @@ def transform_data(df):
 
     cols = ['PitcherThrows', 'RelSpeed', 'SpinRate', 'SpinAxis',
              'VertBreak', 'HorzBreak', 'ZoneSpeed', 'PitchTrajectoryXc1',
-             'PitchTrajectoryZc1', 'TaggedPitchType', 'Tilt_minutes']
+             'PitchTrajectoryZc1', 'TaggedPitchType', 'Tilt']
     
     df = df[cols]
     
@@ -102,4 +106,7 @@ def save_data(df, output_path):
     df (pd.DataFrame): data frame of the transformed data
     output_path (str): file path to save the CSV
     """
+    if isinstance(df, np.ndarray):
+        df = pd.DataFrame(df)
+    
     df.to_csv(output_path, index = False)

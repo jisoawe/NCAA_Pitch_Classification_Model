@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 
-def make_predictions(model, new_data):
+def make_predictions(model, data):
     """
     Predicting the test outcomes based on the trained model
     Args:
@@ -9,7 +9,7 @@ def make_predictions(model, new_data):
         new_data (pd.DataFrame): New data for making predictions
     Returns: pd.Series: The predictions
     """
-    return model.predict(new_data)
+    return model.predict(data)
 
 def load_new_data(file_path):
     """
